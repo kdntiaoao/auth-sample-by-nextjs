@@ -5,25 +5,25 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { signInWithEmailAndPassword } from '@/lib/auth'
+import { createUserWithEmailAndPassword } from '@/lib/auth'
 import Link from 'next/link'
 
 export default function Signin() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const signIn = async () => {
-    const { user, error } = await signInWithEmailAndPassword(email, password)
+  const signUp = async () => {
+    const { user, error } = await createUserWithEmailAndPassword(email, password)
     if (error) {
-      alert('サインインに失敗しました')
+      alert('アカウント登録に失敗しました')
     } else {
-      console.log(`Signed in:`, user)
+      console.log(`Signed up:`, user)
     }
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    signIn()
+    signUp()
   }
 
   return (
@@ -33,7 +33,7 @@ export default function Signin() {
           <Card>
             <form onSubmit={handleSubmit}>
               <CardHeader>
-                <CardTitle>Sign In</CardTitle>
+                <CardTitle>Sign Up</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid w-full items-center gap-4">
@@ -70,7 +70,7 @@ export default function Signin() {
         </div>
         <p>
           <Button asChild size="sm" variant="link">
-            <Link href="/signup">新しいアカウントを作成する</Link>
+            <Link href="/signin">アカウントをお持ちの方はこちら</Link>
           </Button>
         </p>
       </div>
