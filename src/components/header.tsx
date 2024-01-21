@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Container } from './container'
-import { Button } from './ui/button'
+import { AuthButton } from './auth-button'
 
 export const Header = () => {
   return (
@@ -10,14 +10,7 @@ export const Header = () => {
           <h1 className="py-4 text-lg font-bold md:py-6">
             <Link href="/">Auth Sample</Link>
           </h1>
-          <div className="flex gap-4">
-            <Button asChild variant="outline">
-              <Link href="/signin">Sign In</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/signup">Sign Up</Link>
-            </Button>
-          </div>
+          <AuthButton />
         </div>
       </Container>
     </header>
