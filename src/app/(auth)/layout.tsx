@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     if (user.data) {
       router.replace('/')
     }
-  }, [user.data])
+  }, [router, user.data])
 
   if (user.loading) {
     return <AuthPageSkeleton />

@@ -56,7 +56,9 @@ export const AuthCard = ({ title, loading = false, onSubmit }: Props) => {
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button loading={loading} loadingText='Submitted...'>Submit</Button>
+          <Button loading={loading} loadingText="Submitted...">
+            Submit
+          </Button>
         </CardFooter>
       </form>
     </Card>
