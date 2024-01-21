@@ -1,7 +1,9 @@
 import {
   type User,
+  type Unsubscribe,
   createUserWithEmailAndPassword as createUser,
   signInWithEmailAndPassword as signIn,
+  onAuthStateChanged as onAuthStateChangedByFirebase,
 } from 'firebase/auth'
 import { auth } from './firebase/client'
 
@@ -35,4 +37,11 @@ export const signInWithEmailAndPassword = async (
     }
     throw error
   }
+}
+
+export const onAuthStateChanged = (callback: (user: User|null) => void):Unsubscribe  => {
+  const unsub = onAuthStateChangedByFirebase(auth, (user) => {
+    callback(user)
+  })
+  return unsub
 }
