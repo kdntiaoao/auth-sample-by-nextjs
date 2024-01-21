@@ -4,9 +4,17 @@ import { Button } from './ui/button'
 import { Skeleton } from './ui/skeleton'
 import Link from 'next/link'
 import { useUser } from '@/hooks/use-user'
+import { signOut } from '@/lib/auth'
 
 export const AuthButton = () => {
   const [user] = useUser()
+
+  const handleClickSignOut = async () => {
+    const {error} = await signOut()
+    if (error) {
+      alert('サインアウトに失敗しました')
+    }
+  }
 
   // 認証情報の取得中は、ローディングスケルトンを表示する
   if (user.loading) {
@@ -28,7 +36,7 @@ export const AuthButton = () => {
   }
 
   return (
-    <Button type="button" variant="outline">
+    <Button type="button" variant="outline" onClick={handleClickSignOut}>
       Sign Out
     </Button>
   )

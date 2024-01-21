@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword as createUser,
   signInWithEmailAndPassword as signIn,
   onAuthStateChanged as onAuthStateChangedByFirebase,
+  signOut as signOutByFirebase,
 } from 'firebase/auth'
 import { auth } from './firebase/client'
 
@@ -19,7 +20,7 @@ export const createUserWithEmailAndPassword = async (
     if (error instanceof Error) {
       return { user: null, error }
     }
-    throw error
+    return { user: null, error: new Error('Unknown error') }
   }
 }
 
@@ -35,13 +36,25 @@ export const signInWithEmailAndPassword = async (
     if (error instanceof Error) {
       return { user: null, error }
     }
-    throw error
+    return { user: null, error: new Error('Unknown error') }
   }
 }
 
-export const onAuthStateChanged = (callback: (user: User|null) => void):Unsubscribe  => {
+export const onAuthStateChanged = (callback: (user: User | null) => void): Unsubscribe => {
   const unsub = onAuthStateChangedByFirebase(auth, (user) => {
     callback(user)
   })
   return unsub
+}
+
+export const signOut = async () => {
+  try {
+    await signOutByFirebase(auth)
+    return { error: null }
+  } catch (error) {
+    if (error instanceof Error) {
+      return { error }
+    }
+    return { error: new Error('Unknown error') }
+  }
 }
