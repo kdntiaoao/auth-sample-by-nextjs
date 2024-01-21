@@ -8,10 +8,11 @@ import { Button } from '@/components/ui/button'
 
 type Props = {
   title: string
+  loading?: boolean
   onSubmit: (email: string, password: string) => void
 }
 
-export const AuthCard = ({ title, onSubmit }: Props) => {
+export const AuthCard = ({ title, loading = false, onSubmit }: Props) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -32,11 +33,11 @@ export const AuthCard = ({ title, onSubmit }: Props) => {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                // TODO: デバッグ用に type="text" にしている
-                // type="email"
+                type="email"
                 autoComplete="email"
                 placeholder="sample@example.com"
                 value={email}
+                disabled={loading}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
@@ -48,13 +49,14 @@ export const AuthCard = ({ title, onSubmit }: Props) => {
                 autoComplete="current-password"
                 placeholder="password"
                 value={password}
+                disabled={loading}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button>Submit</Button>
+          <Button loading={loading} loadingText='Submitted...'>Submit</Button>
         </CardFooter>
       </form>
     </Card>
