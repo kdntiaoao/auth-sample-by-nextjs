@@ -1,12 +1,14 @@
 'use client'
 
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Button } from './ui/button'
 import { Skeleton } from './ui/skeleton'
-import Link from 'next/link'
 import { useUser } from '@/hooks/use-user'
 import { signOut } from '@/lib/auth'
 
 export const AuthButton = () => {
+  const pathname = usePathname()
   const [user] = useUser()
 
   const handleClickSignOut = async () => {
@@ -25,12 +27,16 @@ export const AuthButton = () => {
   if (!user.data) {
     return (
       <div className="flex gap-4">
-        <Button asChild variant="outline">
-          <Link href="/signin">Sign In</Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link href="/signup">Sign Up</Link>
-        </Button>
+        {pathname !== '/signin' && (
+          <Button asChild variant="outline">
+            <Link href="/signin">Sign In</Link>
+          </Button>
+        )}
+        {pathname !== '/signup' && (
+          <Button asChild variant="outline">
+            <Link href="/signup">Sign Up</Link>
+          </Button>
+        )}
       </div>
     )
   }
