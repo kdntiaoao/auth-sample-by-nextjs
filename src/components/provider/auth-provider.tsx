@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useUser } from '@/hooks/use-user'
-import {onAuthStateChanged} from '@/lib/auth'
+import { onAuthStateChanged } from '@/lib/auth'
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [, setUser] = useUser()

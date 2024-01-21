@@ -10,7 +10,7 @@ export const AuthButton = () => {
   const [user] = useUser()
 
   const handleClickSignOut = async () => {
-    const {error} = await signOut()
+    const { error } = await signOut()
     if (error) {
       alert('サインアウトに失敗しました')
     }
