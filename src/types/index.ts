@@ -1,7 +1,9 @@
 export type Todo = {
-  id: number
+  id: string
   title: string
   description: string
   completed: boolean
   deleted: boolean
+  createdAt: number
+  updatedAt: number
 }
