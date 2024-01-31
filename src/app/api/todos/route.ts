@@ -62,18 +62,14 @@ export async function GET(request: Request) {
   })
 }
 
-
 // 新規TODOを作成する
 export const POST = async (request: Request) => {
   const res: Pick<Todo, 'title' | 'description'> = await request.json()
 
   if (!res.title) {
-    return new Response(
-      'Title is required',
-      {
-        status: 400,
-      },
-    )
+    return new Response('Title is required', {
+      status: 400,
+    })
   }
 
   const now = Date.now()

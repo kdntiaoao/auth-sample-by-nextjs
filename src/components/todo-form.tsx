@@ -7,8 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { doc, setDoc } from 'firebase/firestore'
-import { db } from '@/lib/firebase/client'
 import { useUser } from '@/hooks/use-user'
 
 const formSchema = z.object({
