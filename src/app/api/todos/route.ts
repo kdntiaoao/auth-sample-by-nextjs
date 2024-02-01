@@ -1,5 +1,7 @@
 import { Todo } from '@/types'
 import crypto from 'crypto'
+import { auth, db } from '@/lib/firebase/admin'
+import { UserRecord } from 'firebase-admin/auth'
 
 const DUMMY_TODOS: Todo[] = [
   {
@@ -10,6 +12,7 @@ const DUMMY_TODOS: Todo[] = [
     deleted: false,
     createdAt: 0,
     updatedAt: 0,
+    uid: '1',
   },
   {
     id: '2',
@@ -19,6 +22,7 @@ const DUMMY_TODOS: Todo[] = [
     deleted: false,
     createdAt: 0,
     updatedAt: 0,
+    uid: '2',
   },
 ]
 
@@ -62,29 +66,49 @@ export async function GET(request: Request) {
   })
 }
 
-// 新規TODOを作成する
-export const POST = async (request: Request) => {
-  const res: Pick<Todo, 'title' | 'description'> = await request.json()
+type Body = Pick<Todo, 'title' | 'description'> & { uid: string }
 
-  if (!res.title) {
+// 新規TODOを作成する
+export async function POST(request: Request) {
+  const requestBody: Body = await request.json()
+  console.log('requestBody:', requestBody)
+  const uid = requestBody.uid
+  console.log('uid:', uid, 'title:', requestBody.title, 'description:', requestBody.description)
+
+  if (!requestBody.title) {
     return new Response('Title is required', {
       status: 400,
     })
   }
 
+  let user: UserRecord
+  try {
+    user = await auth.getUser(uid)
+  } catch (error) {
+    console.error(error)
+    return new Response('User not found', {
+      status: 404,
+
+    })
+  }
+
+  const id = crypto.randomUUID()
   const now = Date.now()
 
   const todo: Todo = {
-    id: crypto.randomUUID(),
-    title: res.title,
-    description: res.description || '',
+    id,
+    uid,
+    title: requestBody.title,
+    description: requestBody.description || '',
     completed: false,
     deleted: false,
     createdAt: now,
     updatedAt: now,
   }
 
-  console.log(todo)
+  const res = await db.collection('todos').doc(id).set(todo)
+
+  console.log(res)
 
   return new Response(JSON.stringify(todo), {
     status: 200,

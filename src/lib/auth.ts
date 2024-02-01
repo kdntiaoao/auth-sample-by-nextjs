@@ -15,6 +15,7 @@ type UserResult = { user: User; error: null } | { user: null; error: Error }
 const provider = new GoogleAuthProvider()
 
 export const createUserWithEmailAndPassword = async (email: string, password: string): Promise<UserResult> => {
+  console.log('createUserWithEmailAndPassword')
   try {
     const userCredential = await createUser(auth, email, password)
     const user = userCredential.user
@@ -28,6 +29,7 @@ export const createUserWithEmailAndPassword = async (email: string, password: st
 }
 
 export const signInWithEmailAndPassword = async (email: string, password: string): Promise<UserResult> => {
+  console.log('signInWithEmailAndPassword')
   try {
     const userCredential = await signInWithEmailAndPasswordByFirebase(auth, email, password)
     const user = userCredential.user
@@ -41,6 +43,7 @@ export const signInWithEmailAndPassword = async (email: string, password: string
 }
 
 export const signInWithGoogle = async (): Promise<UserResult> => {
+  console.log('signInWithGoogle')
   try {
     const result = await signInWithPopup(auth, provider)
     return { user: result.user, error: null }
@@ -54,6 +57,7 @@ export const signInWithGoogle = async (): Promise<UserResult> => {
 }
 
 export const onAuthStateChanged = (callback: (user: User | null) => void): Unsubscribe => {
+  console.log('onAuthStateChanged')
   const unsub = onAuthStateChangedByFirebase(auth, (user) => {
     callback(user)
   })
@@ -61,6 +65,7 @@ export const onAuthStateChanged = (callback: (user: User | null) => void): Unsub
 }
 
 export const signOut = async () => {
+  console.log('signOut')
   try {
     await signOutByFirebase(auth)
     return { error: null }

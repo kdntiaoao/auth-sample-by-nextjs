@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <Container>
       <TodoForm />
-      <Todos />
+      {/* <Todos /> */}
     </Container>
   )
 }

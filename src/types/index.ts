@@ -1,5 +1,8 @@
+import { User } from "firebase/auth"
+
 export type Todo = {
   id: string
+  uid: string
   title: string
   description: string
   completed: boolean
