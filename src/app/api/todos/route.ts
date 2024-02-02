@@ -1,5 +1,4 @@
 import { Todo } from '@/types'
-import crypto from 'crypto'
 import { auth, db } from '@/lib/firebase/admin'
 
 const DUMMY_TODOS: Todo[] = [
@@ -11,7 +10,6 @@ const DUMMY_TODOS: Todo[] = [
     deleted: false,
     createdAt: 0,
     updatedAt: 0,
-    uid: '1',
   },
   {
     id: '2',
@@ -21,7 +19,6 @@ const DUMMY_TODOS: Todo[] = [
     deleted: false,
     createdAt: 0,
     updatedAt: 0,
-    uid: '2',
   },
 ]
 
@@ -78,6 +75,7 @@ export async function POST(request: Request) {
     })
   }
 
+  // ユーザーが存在するか確認
   try {
     await auth.getUser(uid)
   } catch (error) {
@@ -86,12 +84,9 @@ export async function POST(request: Request) {
     })
   }
 
-  const id = crypto.randomUUID()
   const now = Date.now()
 
-  const todo: Todo = {
-    id,
-    uid,
+  const todo: Omit<Todo, 'id'> = {
     title: requestBody.title,
     description: requestBody.description || '',
     completed: false,
@@ -100,9 +95,9 @@ export async function POST(request: Request) {
     updatedAt: now,
   }
 
-  await db.collection('todos').doc(id).set(todo)
+  const res = await db.collection('users').doc(uid).collection('todos').add(todo)
 
-  return new Response(JSON.stringify(todo), {
+  return new Response(JSON.stringify({ ...todo, id: res.id }), {
     status: 200,
   })
 }
