@@ -1,16 +1,20 @@
-import admin from 'firebase-admin'
-import { getApp, initializeApp } from 'firebase-admin/app'
+import { cert, initializeApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 import { getFirestore } from 'firebase-admin/firestore'
+import serviceAccount from '../../../service-account-key.json'
 
-const serviceAccount = require('../../../service-account-key.json')
+// const serviceAccount = require('../../../service-account-key.json')
 
 console.log('Initializing Firebase admin app')
 
 // https://firebase.google.com/docs/admin/setup
-const adminApp = initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-}, 'admin')
+const adminApp = initializeApp(
+  {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    credential: cert(serviceAccount as any),
+  },
+  'admin',
+)
 
 // https://firebase.google.com/docs/auth/admin/manage-users
 export const auth = getAuth(adminApp)

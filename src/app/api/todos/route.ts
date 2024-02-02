@@ -1,7 +1,6 @@
 import { Todo } from '@/types'
 import crypto from 'crypto'
 import { auth, db } from '@/lib/firebase/admin'
-import { UserRecord } from 'firebase-admin/auth'
 
 const DUMMY_TODOS: Todo[] = [
   {
@@ -71,9 +70,7 @@ type Body = Pick<Todo, 'title' | 'description'> & { uid: string }
 // 新規TODOを作成する
 export async function POST(request: Request) {
   const requestBody: Body = await request.json()
-  console.log('requestBody:', requestBody)
   const uid = requestBody.uid
-  console.log('uid:', uid, 'title:', requestBody.title, 'description:', requestBody.description)
 
   if (!requestBody.title) {
     return new Response('Title is required', {
@@ -81,14 +78,11 @@ export async function POST(request: Request) {
     })
   }
 
-  let user: UserRecord
   try {
-    user = await auth.getUser(uid)
+    await auth.getUser(uid)
   } catch (error) {
-    console.error(error)
     return new Response('User not found', {
       status: 404,
-
     })
   }
 
@@ -106,9 +100,7 @@ export async function POST(request: Request) {
     updatedAt: now,
   }
 
-  const res = await db.collection('todos').doc(id).set(todo)
-
-  console.log(res)
+  await db.collection('todos').doc(id).set(todo)
 
   return new Response(JSON.stringify(todo), {
     status: 200,

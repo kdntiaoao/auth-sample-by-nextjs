@@ -1,5 +1,3 @@
-import { User } from "firebase/auth"
-
 export type Todo = {
   id: string
   uid: string

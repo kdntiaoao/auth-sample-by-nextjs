@@ -30,11 +30,9 @@ export const TodoForm = () => {
   const onSubmit = async (values: FormSchema) => {
     if (!user.data) return
 
-    console.log('uid:', user.data.uid)
-
     const res = await fetch('/api/todos', {
       method: 'POST',
-      body: JSON.stringify({...values, uid: user.data.uid}),
+      body: JSON.stringify({ ...values, uid: user.data.uid }),
     })
     const data = await res.json()
     console.log(data)
