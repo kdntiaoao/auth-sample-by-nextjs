@@ -1,9 +1,9 @@
 'use client'
 
 import { Container } from '@/components/container'
-import { TodoForm } from '@/components/todo-form'
-import { Todos } from '@/components/todos'
 import { useUser } from '@/hooks/use-user'
+import { NotSignedIn } from './_components/not-signed-in'
+import { SignedIn } from './_components/signed-in'
 
 const Contents = () => {
   const [user] = useUser()
@@ -13,15 +13,10 @@ const Contents = () => {
   }
 
   if (!user.data) {
-    return <p>Sign in to see your todos.</p>
+    return <NotSignedIn />
   }
 
-  return (
-    <>
-      <TodoForm />
-      <Todos />
-    </>
-  )
+  return <SignedIn />
 }
 
 export default function Home() {

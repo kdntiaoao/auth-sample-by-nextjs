@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useUser } from '@/hooks/use-user'
 import { useTodos } from '@/hooks/use-todos'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
   title: z.string().min(1, '入力してください').max(100, '100文字以内で入力してください'),
@@ -18,6 +19,7 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>
 
 export const TodoForm = () => {
+  const router = useRouter()
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,6 +35,7 @@ export const TodoForm = () => {
     if (!user.data) return
     await addTodo(values.title, values.description)
     form.reset()
+    router.replace('/')
   }
 
   return (
