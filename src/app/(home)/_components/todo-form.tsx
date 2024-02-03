@@ -23,18 +23,25 @@ export const TodoForm = () => {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      description: '',
+      title: window.sessionStorage.getItem('title') || '',
+      description: window.sessionStorage.getItem('description') || '',
     },
   })
-
   const [user] = useUser()
   const { addTodo } = useTodos()
+
+  const submitting = form.formState.isSubmitting || form.formState.isSubmitted
+
+  const saveStorage = (name: keyof FormSchema, value: string) => {
+    window.sessionStorage.setItem(name, value)
+  }
 
   const onSubmit = async (values: FormSchema) => {
     if (!user.data) return
     await addTodo(values.title, values.description)
     form.reset()
+    window.sessionStorage.removeItem('title')
+    window.sessionStorage.removeItem('description')
     router.replace('/')
   }
 
@@ -48,7 +55,15 @@ export const TodoForm = () => {
             <FormItem>
               <FormLabel>Title *</FormLabel>
               <FormControl>
-                <Input {...field} required />
+                <Input
+                  {...field}
+                  required
+                  disabled={submitting}
+                  onChange={(...args) => {
+                    field.onChange(...args)
+                    saveStorage(field.name, args[0].target.value)
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -61,13 +76,22 @@ export const TodoForm = () => {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <Textarea
+                  {...field}
+                  disabled={submitting}
+                  onChange={(...args) => {
+                    field.onChange(...args)
+                    saveStorage(field.name, args[0].target.value)
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" loading={submitting} loadingText="Submitted...">
+          Submit
+        </Button>
       </form>
     </Form>
   )
