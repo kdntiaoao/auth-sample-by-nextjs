@@ -1,6 +1,7 @@
 import { Todo } from '@/types'
-import useSWR, { Fetcher } from 'swr'
+import useSWR from 'swr'
 import { useUser } from './use-user'
+import { addTodoToStore, getTodos } from '@/lib/todos'
 
 type TodosResult = {
   todos: Todo[]
@@ -9,20 +10,14 @@ type TodosResult = {
   totalPages: number
 }
 
-const fetcher = <T>(url: string): ReturnType<Fetcher<T>> => fetch(url).then((res) => res.json())
-
 export const useTodos = () => {
   const [user] = useUser()
 
   const uid = user.data?.uid ?? ''
-  const { data, error, isLoading, mutate } = useSWR<TodosResult>(`/api/todos/${uid}`, fetcher)
+  const { data, error, isLoading, mutate } = useSWR<TodosResult>(uid, getTodos)
 
   const addTodo = async (title: string, description: string) => {
-    const res = await fetch('/api/todos', {
-      method: 'POST',
-      body: JSON.stringify({ title, description, uid }),
-    })
-    const newTodo = await res.json()
+    const newTodo = await addTodoToStore(uid, { title, description })
     mutate()
     return newTodo
   }
