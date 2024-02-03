@@ -8,6 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useUser } from '@/hooks/use-user'
+import { useTodos } from '@/hooks/use-todos'
 
 const formSchema = z.object({
   title: z.string().min(1, '入力してください').max(100, '100文字以内で入力してください'),
@@ -26,16 +27,12 @@ export const TodoForm = () => {
   })
 
   const [user] = useUser()
+  const { addTodo } = useTodos()
 
   const onSubmit = async (values: FormSchema) => {
     if (!user.data) return
-
-    const res = await fetch('/api/todos', {
-      method: 'POST',
-      body: JSON.stringify({ ...values, uid: user.data.uid }),
-    })
-    const data = await res.json()
-    console.log(data)
+    await addTodo(values.title, values.description)
+    form.reset()
   }
 
   return (
@@ -46,9 +43,9 @@ export const TodoForm = () => {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Title *</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} required />
               </FormControl>
               <FormMessage />
             </FormItem>

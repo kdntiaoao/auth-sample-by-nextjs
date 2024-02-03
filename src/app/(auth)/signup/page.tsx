@@ -13,15 +13,13 @@ export default function Signin() {
 
   const signUp = async (email: string, password: string) => {
     setLoading(true)
-    const { user, error } = await createUserWithEmailAndPassword(email, password)
+    const { error } = await createUserWithEmailAndPassword(email, password)
     setLoading(false)
     if (error) {
       toast({
         variant: 'destructive',
         description: 'アカウント登録に失敗しました',
       })
-    } else {
-      console.log(`Signed up:`, user)
     }
   }
 
