@@ -30,7 +30,7 @@ export const TodoForm = () => {
   const [user] = useUser()
   const { addTodo } = useTodos()
 
-  const submitting = form.formState.isSubmitting || form.formState.isSubmitted
+  const submitting = form.formState.isSubmitting
 
   const saveStorage = (name: keyof FormSchema, value: string) => {
     window.sessionStorage.setItem(name, value)

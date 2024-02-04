@@ -7,3 +7,5 @@ export type Todo = {
   createdAt: number
   updatedAt: number
 }
+
+export type TodoStatus = 'completed' | 'deleted'
