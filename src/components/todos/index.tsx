@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import { format } from 'date-fns'
 import { useState } from 'react'
 import styles from './index.module.css'
+import { toast } from 'sonner'
 
 export const Todos = () => {
   const [completedTodos, setCompletedTodos] = useState<string[]>([])
@@ -21,14 +22,31 @@ export const Todos = () => {
       }
     })
 
-  const completeTodo = (id: string, checked: boolean) => {
+  const changeCompleteStatus = (id: string, checked: boolean) => {
+    const todo = todosFormatted.find((todo) => todo.id === id)
     const todoElement = document.querySelector<HTMLElement>(`[data-todo="${id}"]`)
     const todoElementHeight = todoElement?.clientHeight
     if (todoElementHeight) {
       todoElement.style.height = `${todoElementHeight}px`
     }
+
     changeStatus(id, 'completed', checked)
-    setCompletedTodos((prev) => [...prev, id])
+
+    if (checked) {
+      const title = todo?.title && todo.title.length > 10 ? todo?.title.slice(0, 10) + '...' : todo?.title || 'タスク'
+      toast['success'](`「${title}」を完了にしました`, {
+        action: {
+          label: '元に戻す',
+          onClick: () => changeCompleteStatus(id, !checked),
+        },
+      })
+    }
+
+    if (checked) {
+      setCompletedTodos((prev) => [...prev, id])
+    } else {
+      setCompletedTodos((prev) => prev.filter((todoId) => todoId !== id))
+    }
   }
 
   if (loading) {
@@ -45,14 +63,25 @@ export const Todos = () => {
         <li
           key={todo.id}
           data-todo={todo.id}
-          className={clsx('mb-4', completedTodos.includes(todo.id) && styles.shrink)}
+          className={clsx(
+            'mb-4 overflow-hidden transition-all duration-300',
+            completedTodos.includes(todo.id) && 'delay-200',
+            completedTodos.includes(todo.id) && styles.shrink,
+          )}
         >
-          <div className={clsx('flex gap-2 rounded-md border p-4', completedTodos.includes(todo.id) && styles.fadeOut)}>
+          <div
+            className={clsx(
+              'flex gap-2 rounded-md border p-4 transition-all duration-200',
+              !completedTodos.includes(todo.id) && 'delay-300',
+              completedTodos.includes(todo.id) && 'opacity-0 delay-0'
+            )}
+          >
             <div>
               <Checkbox
                 id={todo.id}
+                checked={completedTodos.includes(todo.id)}
                 disabled={completedTodos.includes(todo.id)}
-                onCheckedChange={(checked) => completeTodo(todo.id, !!checked)}
+                onCheckedChange={(checked) => changeCompleteStatus(todo.id, !!checked)}
               />
             </div>
             <label htmlFor={todo.id} className="grid flex-1 gap-2">

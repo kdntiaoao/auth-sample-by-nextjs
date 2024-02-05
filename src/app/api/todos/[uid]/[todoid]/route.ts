@@ -28,7 +28,6 @@ export async function PATCH(request: Request, context: { params: { uid: string; 
   const now = Date.now()
   const updateData = {
     [requestBody.status]: requestBody.newState,
-    updatedAt: now,
   }
   await todoRef.update(updateData)
 

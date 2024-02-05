@@ -3,6 +3,7 @@ import './globals.css'
 import { Header } from '@/components/header'
 import { AuthProvider } from '@/components/provider/auth-provider'
 import { Toaster } from '@/components/ui/toaster'
+import { Toaster as ToasterSonner } from '@/components/ui/sonner'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -22,6 +23,7 @@ export default function RootLayout({
           <main className="pb-8 pt-4">{children}</main>
         </AuthProvider>
         <Toaster />
+        <ToasterSonner />
       </body>
     </html>
   )
