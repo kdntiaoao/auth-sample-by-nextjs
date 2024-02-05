@@ -73,7 +73,7 @@ export const Todos = () => {
             className={clsx(
               'flex gap-2 rounded-md border p-4 transition-all duration-200',
               !completedTodos.includes(todo.id) && 'delay-300',
-              completedTodos.includes(todo.id) && 'opacity-0 delay-0'
+              completedTodos.includes(todo.id) && 'opacity-0 delay-0',
             )}
           >
             <div>
