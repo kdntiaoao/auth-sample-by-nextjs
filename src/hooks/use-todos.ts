@@ -24,6 +24,7 @@ export const useTodos = () => {
 
   const changeStatus = async (id: string, status: TodoStatus, newState: boolean) => {
     await updateTodoStatus(uid, id, status, newState)
+    mutate()
   }
 
   if (user.loading) {

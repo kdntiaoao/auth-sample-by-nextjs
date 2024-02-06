@@ -1,34 +1,22 @@
 'use client'
 
-import { Checkbox } from '@/components/ui/checkbox'
 import { useTodos } from '@/hooks/use-todos'
-import clsx from 'clsx'
-import { format } from 'date-fns'
 import { useState } from 'react'
-import styles from './index.module.css'
 import { toast } from 'sonner'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { TodosItem } from '../todos-item'
+import { set } from 'date-fns'
 
 export const Todos = () => {
-  const [completedTodos, setCompletedTodos] = useState<string[]>([])
   const { todos, error, loading, changeStatus } = useTodos()
+  const [hiddenTodosUncompleted, setHiddenTodosUncompleted] = useState<string[]>([])
+  const [hiddenTodosCompleted, setHiddenTodosCompleted] = useState<string[]>([])
 
-  const todosFormatted = todos
-    .filter((todo) => !todo.completed && !todo.deleted)
-    .map((todo) => {
-      return {
-        ...todo,
-        createdAtString: format(new Date(todo.createdAt), 'yyyy-MM-dd HH:mm:ss'),
-        updatedAtString: format(new Date(todo.updatedAt), 'yyyy-MM-dd HH:mm:ss'),
-      }
-    })
+  const todosUncompleted = todos.filter((todo) => !todo.completed && !todo.deleted)
+  const todosCompleted = todos.filter((todo) => todo.completed && !todo.deleted)
 
-  const changeCompleteStatus = (id: string, checked: boolean) => {
-    const todo = todosFormatted.find((todo) => todo.id === id)
-    const todoElement = document.querySelector<HTMLElement>(`[data-todo="${id}"]`)
-    const todoElementHeight = todoElement?.clientHeight
-    if (todoElementHeight) {
-      todoElement.style.height = `${todoElementHeight}px`
-    }
+  const changeCompletedStatus = (id: string, checked: boolean) => {
+    const todo = todos.find((todo) => todo.id === id)
 
     changeStatus(id, 'completed', checked)
 
@@ -37,15 +25,17 @@ export const Todos = () => {
       toast['success'](`「${title}」を完了にしました`, {
         action: {
           label: '元に戻す',
-          onClick: () => changeCompleteStatus(id, !checked),
+          onClick: () => changeCompletedStatus(id, !checked),
         },
       })
     }
 
     if (checked) {
-      setCompletedTodos((prev) => [...prev, id])
+      setHiddenTodosUncompleted((prev) => [...prev, id])
+      setHiddenTodosCompleted((prev) => prev.filter((todoId) => todoId !== id))
     } else {
-      setCompletedTodos((prev) => prev.filter((todoId) => todoId !== id))
+      setHiddenTodosUncompleted((prev) => prev.filter((todoId) => todoId !== id))
+      setHiddenTodosCompleted((prev) => [...prev, id])
     }
   }
 
@@ -57,45 +47,38 @@ export const Todos = () => {
     return <p>No todos found.</p>
   }
 
+  console.log(hiddenTodosUncompleted)
+
   return (
-    <ul>
-      {todosFormatted.map((todo) => (
-        <li
-          key={todo.id}
-          data-todo={todo.id}
-          className={clsx(
-            'mb-4 overflow-hidden transition-all duration-300',
-            completedTodos.includes(todo.id) && 'delay-200',
-            completedTodos.includes(todo.id) && styles.shrink,
-          )}
-        >
-          <div
-            className={clsx(
-              'flex gap-2 rounded-md border p-4 transition-all duration-200',
-              !completedTodos.includes(todo.id) && 'delay-300',
-              completedTodos.includes(todo.id) && 'opacity-0 delay-0',
-            )}
-          >
-            <div>
-              <Checkbox
-                id={todo.id}
-                checked={completedTodos.includes(todo.id)}
-                disabled={completedTodos.includes(todo.id)}
-                onCheckedChange={(checked) => changeCompleteStatus(todo.id, !!checked)}
-              />
-            </div>
-            <label htmlFor={todo.id} className="grid flex-1 gap-2">
-              <span className="break-words font-bold">{todo.title}</span>
-              <span className="text-sm">
-                created at: {todo.createdAtString}
-                <br />
-                updated at: {todo.updatedAtString}
-              </span>
-              {todo.description && <span className="break-words text-sm">{todo.description}</span>}
-            </label>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <Tabs defaultValue="todo">
+      <TabsList>
+        <TabsTrigger value="todo">To Do</TabsTrigger>
+        <TabsTrigger value="completed">Completed</TabsTrigger>
+      </TabsList>
+      <TabsContent value="todo">
+        <ul>
+          {todosUncompleted.map((todo) => (
+            <TodosItem
+              key={todo.id}
+              todo={todo}
+              hidden={hiddenTodosUncompleted.includes(todo.id)}
+              onCheckedChange={(checked) => changeCompletedStatus(todo.id, checked)}
+            />
+          ))}
+        </ul>
+      </TabsContent>
+      <TabsContent value="completed">
+        <ul>
+          {todosCompleted.map((todo) => (
+            <TodosItem
+              key={todo.id}
+              todo={todo}
+              hidden={hiddenTodosCompleted.includes(todo.id)}
+              onCheckedChange={(checked) => changeCompletedStatus(todo.id, checked)}
+            />
+          ))}
+        </ul>
+      </TabsContent>
+    </Tabs>
   )
 }
