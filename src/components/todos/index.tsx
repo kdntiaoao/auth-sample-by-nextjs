@@ -5,7 +5,6 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { TodosItem } from '../todos-item'
-import { set } from 'date-fns'
 
 export const Todos = () => {
   const { todos, error, loading, changeStatus } = useTodos()
@@ -14,6 +13,7 @@ export const Todos = () => {
 
   const todosUncompleted = todos.filter((todo) => !todo.completed && !todo.deleted)
   const todosCompleted = todos.filter((todo) => todo.completed && !todo.deleted)
+  const todosDeleted = todos.filter((todo) => todo.deleted)
 
   const changeCompletedStatus = (id: string, checked: boolean) => {
     const todo = todos.find((todo) => todo.id === id)
@@ -39,6 +39,12 @@ export const Todos = () => {
     }
   }
 
+  const handleDeleteTodo = (id: string) => {
+    changeStatus(id, 'deleted', true)
+    setHiddenTodosUncompleted((prev) => [...prev, id])
+    setHiddenTodosCompleted((prev) => [...prev, id])
+  }
+
   if (loading) {
     return <p>Loading...</p>
   }
@@ -54,6 +60,7 @@ export const Todos = () => {
       <TabsList>
         <TabsTrigger value="todo">To Do</TabsTrigger>
         <TabsTrigger value="completed">Completed</TabsTrigger>
+        <TabsTrigger value="deleted">Deleted</TabsTrigger>
       </TabsList>
       <TabsContent value="todo">
         <ul>
@@ -63,6 +70,7 @@ export const Todos = () => {
               todo={todo}
               hidden={hiddenTodosUncompleted.includes(todo.id)}
               onCheckedChange={(checked) => changeCompletedStatus(todo.id, checked)}
+              onDelete={() => handleDeleteTodo(todo.id)}
             />
           ))}
         </ul>
@@ -75,6 +83,19 @@ export const Todos = () => {
               todo={todo}
               hidden={hiddenTodosCompleted.includes(todo.id)}
               onCheckedChange={(checked) => changeCompletedStatus(todo.id, checked)}
+              onDelete={() => handleDeleteTodo(todo.id)}
+            />
+          ))}
+        </ul>
+      </TabsContent>
+      <TabsContent value="deleted">
+        <ul>
+          {todosDeleted.map((todo) => (
+            <TodosItem
+              key={todo.id}
+              todo={todo}
+              onCheckedChange={(checked) => changeCompletedStatus(todo.id, checked)}
+              onDelete={() => handleDeleteTodo(todo.id)}
             />
           ))}
         </ul>

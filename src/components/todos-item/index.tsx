@@ -6,14 +6,16 @@ import styles from './index.module.css'
 import { Checkbox } from '@/components/ui/checkbox'
 import { format } from 'date-fns'
 import { useEffect, useRef } from 'react'
+import { Button } from '../ui/button'
 
 type Props = {
   todo: Todo
   hidden?: boolean
   onCheckedChange: (checked: boolean) => void
+  onDelete: () => void
 }
 
-export const TodosItem = ({ todo, hidden, onCheckedChange }: Props) => {
+export const TodosItem = ({ todo, hidden, onCheckedChange, onDelete }: Props) => {
   const ref = useRef<HTMLLIElement>(null)
 
   useEffect(() => {
@@ -23,7 +25,7 @@ export const TodosItem = ({ todo, hidden, onCheckedChange }: Props) => {
 
   return (
     <li
-    ref={ref}
+      ref={ref}
       data-todo={todo.id}
       className={clsx(
         'mb-2 overflow-hidden transition-all duration-300',
@@ -33,27 +35,32 @@ export const TodosItem = ({ todo, hidden, onCheckedChange }: Props) => {
     >
       <div
         className={clsx(
-          'flex gap-2 rounded-md border border-slate-200 p-4 transition-all duration-200',
+          'flex gap-4 rounded-md border border-slate-200 p-4 transition-all duration-200',
           !hidden && 'delay-300',
           hidden && 'opacity-0 delay-0',
         )}
       >
-        <div>
-          <Checkbox
-            id={todo.id}
-            defaultChecked={todo.completed}
-            onCheckedChange={onCheckedChange}
-          />
+        <div className="flex flex-1 gap-2">
+          {!todo.deleted && (
+            <div>
+              <Checkbox id={todo.id} defaultChecked={todo.completed} onCheckedChange={onCheckedChange} />
+            </div>
+          )}
+          <label htmlFor={todo.id} className="grid flex-1 gap-2">
+            <span className="break-words font-bold">{todo.title}</span>
+            <span className="text-sm">
+              created at: {format(new Date(todo.createdAt), 'yyyy-MM-dd HH:mm:ss')}
+              <br />
+              updated at: {format(new Date(todo.updatedAt), 'yyyy-MM-dd HH:mm:ss')}
+            </span>
+            {todo.description && <span className="break-words text-sm">{todo.description}</span>}
+          </label>
         </div>
-        <label htmlFor={todo.id} className="grid flex-1 gap-2">
-          <span className="break-words font-bold">{todo.title}</span>
-          <span className="text-sm">
-            created at: {format(new Date(todo.createdAt), 'yyyy-MM-dd HH:mm:ss')}
-            <br />
-            updated at: {format(new Date(todo.updatedAt), 'yyyy-MM-dd HH:mm:ss')}
-          </span>
-          {todo.description && <span className="break-words text-sm">{todo.description}</span>}
-        </label>
+        {!todo.deleted && (
+          <Button type="button" onClick={onDelete}>
+            Delete
+          </Button>
+        )}
       </div>
     </li>
   )
