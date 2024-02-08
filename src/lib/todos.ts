@@ -1,6 +1,7 @@
 import { Todo, TodoStatus } from '@/types'
 
 export const getTodos = async (uid: string) => {
+  if (!uid) return []
   const res = await fetch(`/api/todos/${uid}`)
   const data = await res.json()
   return data

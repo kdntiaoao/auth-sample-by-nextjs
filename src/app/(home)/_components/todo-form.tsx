@@ -37,7 +37,6 @@ export const TodoForm = () => {
   }
 
   const onSubmit = async (values: FormSchema) => {
-    if (!user.data) return
     await addTodo(values.title, values.description)
     form.reset()
     window.sessionStorage.removeItem('title')
