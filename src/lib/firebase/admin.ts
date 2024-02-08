@@ -1,9 +1,9 @@
 import { cert, getApps, initializeApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 import { getFirestore } from 'firebase-admin/firestore'
-import serviceAccount from '../../../service-account-key.json'
+import { decryptGCPServiceAccount } from "../../../decrypt";
 
-// const serviceAccount = require('../../../service-account-key.json')
+const serviceAccount = decryptGCPServiceAccount()
 
 console.log('Initializing Firebase admin app')
 
