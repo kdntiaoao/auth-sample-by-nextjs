@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { useUser } from '@/hooks/use-user'
 import { useTodos } from '@/hooks/use-todos'
 import { useRouter } from 'next/navigation'
 
@@ -27,7 +26,6 @@ export const TodoForm = () => {
       description: window.sessionStorage.getItem('description') || '',
     },
   })
-  const [user] = useUser()
   const { addTodo } = useTodos()
 
   const submitting = form.formState.isSubmitting

@@ -12,6 +12,7 @@ type TodosResult = {
 
 export const useTodos = (): {
   todos: Todo[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any
   loading: boolean
   mutate: () => void

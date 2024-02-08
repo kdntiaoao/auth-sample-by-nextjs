@@ -1,7 +1,6 @@
 'use client'
 
 import { Container } from '@/components/container'
-import { useUser } from '@/hooks/use-user'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
