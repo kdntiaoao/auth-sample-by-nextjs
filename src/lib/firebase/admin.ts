@@ -1,7 +1,7 @@
-import { readFileSync } from 'fs'
 import admin from 'firebase-admin'
+import { decryptGCPServiceAccount } from "../../../decrypt";
 
-const serviceAccount = readFileSync('../../../service-account-key.json', 'utf8')
+const serviceAccount = decryptGCPServiceAccount()
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
