@@ -6,8 +6,9 @@ import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { TodoForm } from '@/app/(home)/_components/todo-form'
 import { Todos } from '@/components/todos'
+import { Suspense } from 'react'
 
-export default function Home() {
+const Contents = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -24,7 +25,7 @@ export default function Home() {
   }
 
   return (
-    <Container>
+    <>
       <Dialog open={isCreate} onOpenChange={handleOpenChange}>
         <DialogContent>
           <TodoForm />
@@ -38,6 +39,16 @@ export default function Home() {
       <div className="mt-6">
         <Todos />
       </div>
+    </>
+  )
+}
+
+export default function Home() {
+  return (
+    <Container>
+      <Suspense fallback={<p>Loading...</p>}>
+        <Contents />
+      </Suspense>
     </Container>
   )
 }
