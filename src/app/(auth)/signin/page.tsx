@@ -13,15 +13,13 @@ export default function Signin() {
 
   const signIn = async (email: string, password: string) => {
     setLoading(true)
-    const { user, error } = await signInWithEmailAndPassword(email, password)
+    const { error } = await signInWithEmailAndPassword(email, password)
     setLoading(false)
     if (error) {
       toast({
         variant: 'destructive',
         description: 'サインインに失敗しました',
       })
-    } else {
-      console.log(`Signed in:`, user)
     }
   }
 

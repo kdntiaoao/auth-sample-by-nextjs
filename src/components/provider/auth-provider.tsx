@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const unsub = onAuthStateChanged((user) => {
-      console.log(user)
       setUser({
         data: user,
         loading: false,
