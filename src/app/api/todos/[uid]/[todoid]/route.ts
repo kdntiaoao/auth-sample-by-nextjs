@@ -19,8 +19,7 @@ export async function PATCH(request: Request, context: { params: { uid: string; 
   }
 
   const todoRef = db.collection('users').doc(uid).collection('todos').doc(todoid)
-  const todo =
-    await todoRef.get()
+  const todo = await todoRef.get()
   if (!todo.exists) {
     return new Response('Todo not found', {
       status: 404,

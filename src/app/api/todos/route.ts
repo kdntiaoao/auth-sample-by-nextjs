@@ -1,7 +1,7 @@
 import { Todo } from '@/types'
 import { auth, db } from '@/lib/firebase/admin'
 
-type Body = Pick<Todo, 'title' | 'description'> & { uid: string }
+type Body = Pick<Todo, 'title' | 'description' | 'deadline'> & { uid: string }
 
 // 新規TODOを作成する
 export async function POST(request: Request) {
@@ -32,6 +32,7 @@ export async function POST(request: Request) {
     deleted: false,
     createdAt: now,
     updatedAt: now,
+    deadline: requestBody.deadline,
   }
 
   const res = await db.collection('users').doc(uid).collection('todos').add(todo)

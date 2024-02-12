@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 const formSchema = z.object({
   title: z.string().min(1, '入力してください').max(100, '100文字以内で入力してください'),
   description: z.string().max(500, '500文字以内で入力してください'),
+  deadline: z.string(),
 })
 
 type FormSchema = z.infer<typeof formSchema>
@@ -24,6 +25,7 @@ export const TodoForm = () => {
     defaultValues: {
       title: window.sessionStorage.getItem('title') || '',
       description: window.sessionStorage.getItem('description') || '',
+      deadline: window.sessionStorage.getItem('deadline') || new Date().toISOString().slice(0, 16),
     },
   })
   const { addTodo } = useTodos()
@@ -35,7 +37,7 @@ export const TodoForm = () => {
   }
 
   const onSubmit = async (values: FormSchema) => {
-    await addTodo(values.title, values.description)
+    await addTodo(values.title, values.description, values.deadline)
     form.reset()
     window.sessionStorage.removeItem('title')
     window.sessionStorage.removeItem('description')
@@ -66,6 +68,7 @@ export const TodoForm = () => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="description"
@@ -86,6 +89,29 @@ export const TodoForm = () => {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="deadline"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Deadline</FormLabel>
+              <FormControl>
+                <Input
+                  type="datetime-local"
+                  disabled={submitting}
+                  value={field.value}
+                  onChange={(...args) => {
+                    field.onChange(...args)
+                    saveStorage(field.name, args[0].target.value)
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type="submit" loading={submitting} loadingText="Submitted...">
           Submit
         </Button>

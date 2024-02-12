@@ -6,6 +6,7 @@ export type Todo = {
   deleted: boolean
   createdAt: number
   updatedAt: number
+  deadline: string
 }
 
 export type TodoStatus = 'completed' | 'deleted'

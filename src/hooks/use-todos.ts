@@ -9,7 +9,7 @@ export const useTodos = (): {
   error: any
   loading: boolean
   mutate: () => void
-  addTodo: (title: string, description: string) => Promise<Todo>
+  addTodo: (title: string, description: string, deadline: string) => Promise<Todo>
   changeStatus: (id: string, status: TodoStatus, newState: boolean) => Promise<void>
 } => {
   const [user] = useUser()
@@ -17,7 +17,7 @@ export const useTodos = (): {
   const uid = user.data?.uid ?? ''
   const { data, error, isLoading, mutate } = useSWR<TodosResult>(uid, getTodos)
 
-  const addTodo = async (title: string, description: string): Promise<Todo> => {
+  const addTodo = async (title: string, description: string, deadline: string): Promise<Todo> => {
     let newTodo: Todo
     // サインインしているときはFirestoreに追加
     if (uid) {
@@ -34,6 +34,7 @@ export const useTodos = (): {
         deleted: false,
         createdAt: now,
         updatedAt: now,
+        deadline,
       }
       todos.push(newTodo)
       window.localStorage.setItem('todos', JSON.stringify(todos))
@@ -74,6 +75,7 @@ export const useTodos = (): {
         deleted: false,
         createdAt: 0,
         updatedAt: 0,
+        deadline: '',
       }),
       changeStatus: async () => {},
     }
