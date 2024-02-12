@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useTodos } from '@/hooks/use-todos'
 import { useRouter } from 'next/navigation'
+import { DialogClose } from '@/components/ui/dialog'
 
 const formSchema = z.object({
   title: z.string().min(1, '入力してください').max(100, '100文字以内で入力してください'),
@@ -41,7 +42,7 @@ export const TodoForm = () => {
     form.reset()
     window.sessionStorage.removeItem('title')
     window.sessionStorage.removeItem('description')
-    router.replace('/')
+    router.refresh()
   }
 
   return (
@@ -112,9 +113,11 @@ export const TodoForm = () => {
           )}
         />
 
-        <Button type="submit" loading={submitting} loadingText="Submitted...">
-          Submit
-        </Button>
+        <DialogClose asChild>
+          <Button type="submit" loading={submitting} loadingText="Submitted...">
+            Submit
+          </Button>
+        </DialogClose>
       </form>
     </Form>
   )
