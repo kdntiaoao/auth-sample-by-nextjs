@@ -42,6 +42,7 @@ export const TodoForm = () => {
     form.reset()
     window.sessionStorage.removeItem('title')
     window.sessionStorage.removeItem('description')
+    window.sessionStorage.removeItem('deadline')
     router.refresh()
   }
 
