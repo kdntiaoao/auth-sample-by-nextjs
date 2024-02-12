@@ -36,7 +36,9 @@ export async function POST(request: Request) {
 
   const res = await db.collection('users').doc(uid).collection('todos').add(todo)
 
-  return new Response(JSON.stringify({ ...todo, id: res.id }), {
+  const newTodo: Todo = { ...todo, id: res.id }
+
+  return new Response(JSON.stringify(newTodo), {
     status: 200,
   })
 }

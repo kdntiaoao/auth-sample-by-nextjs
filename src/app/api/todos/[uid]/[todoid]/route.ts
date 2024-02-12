@@ -1,4 +1,4 @@
-import type { TodoStatus } from '@/types'
+import type { Todo, TodoStatus } from '@/types'
 import { auth, db } from '@/lib/firebase/admin'
 
 type Body = { status: TodoStatus; newState: boolean }
@@ -19,7 +19,8 @@ export async function PATCH(request: Request, context: { params: { uid: string; 
   }
 
   const todoRef = db.collection('users').doc(uid).collection('todos').doc(todoid)
-  const todo = await todoRef.get()
+  const todo =
+    await todoRef.get()
   if (!todo.exists) {
     return new Response('Todo not found', {
       status: 404,
@@ -30,7 +31,10 @@ export async function PATCH(request: Request, context: { params: { uid: string; 
   }
   await todoRef.update(updateData)
 
-  return new Response(JSON.stringify({ ...todo.data(), id: todoid, ...updateData }), {
+  const todoData = todo.data() as Omit<Todo, 'id'>
+  const updatedTodo: Todo = { ...todoData, id: todoid, ...updateData }
+
+  return new Response(JSON.stringify(updatedTodo), {
     status: 200,
   })
 }

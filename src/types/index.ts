@@ -9,3 +9,10 @@ export type Todo = {
 }
 
 export type TodoStatus = 'completed' | 'deleted'
+
+export type TodosResult = {
+  todos: Todo[]
+  page: number
+  totalTodos: number
+  totalPages: number
+}

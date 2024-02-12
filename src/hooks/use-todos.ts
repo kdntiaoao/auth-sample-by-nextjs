@@ -1,14 +1,7 @@
-import { Todo, TodoStatus } from '@/types'
+import { Todo, TodoStatus, TodosResult } from '@/types'
 import useSWR from 'swr'
 import { useUser } from './use-user'
 import { addTodoToStore, updateTodoStatus, getTodos } from '@/lib/todos'
-
-type TodosResult = {
-  todos: Todo[]
-  page: number
-  totalTodos: number
-  totalPages: number
-}
 
 export const useTodos = (): {
   todos: Todo[]

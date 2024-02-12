@@ -1,4 +1,4 @@
-import type { Todo } from '@/types'
+import type { Todo, TodosResult } from '@/types'
 import { auth, db } from '@/lib/firebase/admin'
 
 const TODOS_PER_PAGE = 10
@@ -49,7 +49,7 @@ export async function GET(request: Request, context: { params: { uid: string } }
 
   const todos = todosAll.slice((page - 1) * TODOS_PER_PAGE, page * TODOS_PER_PAGE)
 
-  const result = {
+  const result: TodosResult = {
     todos,
     page,
     totalTodos: todos.length,
