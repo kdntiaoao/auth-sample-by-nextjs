@@ -11,6 +11,8 @@ import { useTodos } from '@/hooks/use-todos'
 import { useRouter } from 'next/navigation'
 import { DialogClose } from '@/components/ui/dialog'
 
+const MS_PER_HOUR = 1000 * 60 * 60
+
 const formSchema = z.object({
   title: z.string().min(1, '入力してください').max(100, '100文字以内で入力してください'),
   description: z.string().max(500, '500文字以内で入力してください'),
@@ -26,7 +28,7 @@ export const TodoForm = () => {
     defaultValues: {
       title: window.sessionStorage.getItem('title') || '',
       description: window.sessionStorage.getItem('description') || '',
-      deadline: window.sessionStorage.getItem('deadline') || new Date().toISOString().slice(0, 16),
+      deadline: window.sessionStorage.getItem('deadline') || new Date(Date.now() + 9 * MS_PER_HOUR).toISOString().slice(0, 16),
     },
   })
   const { addTodo } = useTodos()
@@ -38,12 +40,13 @@ export const TodoForm = () => {
   }
 
   const onSubmit = async (values: FormSchema) => {
-    await addTodo(values.title, values.description, values.deadline)
-    form.reset()
-    window.sessionStorage.removeItem('title')
-    window.sessionStorage.removeItem('description')
-    window.sessionStorage.removeItem('deadline')
-    router.refresh()
+    console.log(values)
+    // await addTodo(values.title, values.description, values.deadline)
+    // form.reset()
+    // window.sessionStorage.removeItem('title')
+    // window.sessionStorage.removeItem('description')
+    // window.sessionStorage.removeItem('deadline')
+    // router.refresh()
   }
 
   return (
@@ -104,6 +107,7 @@ export const TodoForm = () => {
                   disabled={submitting}
                   value={field.value}
                   onChange={(...args) => {
+                    console.log(args)
                     field.onChange(...args)
                     saveStorage(field.name, args[0].target.value)
                   }}
