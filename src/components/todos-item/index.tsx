@@ -40,21 +40,23 @@ export const TodosItem = ({ todo, hidden, onCheckedChange, onDelete }: Props) =>
           hidden && 'opacity-0 delay-0',
         )}
       >
-        <div className="flex flex-1 gap-2">
+        <div className="flex flex-1 items-start gap-2">
           {!todo.deleted && (
-            <div>
+            <label className="relative block before:absolute before:-inset-2 before:block">
               <Checkbox id={todo.id} defaultChecked={todo.completed} onCheckedChange={onCheckedChange} />
-            </div>
+            </label>
           )}
-          <label htmlFor={todo.id} className="grid flex-1 gap-2">
+          <div className="grid flex-1 gap-2">
             <span className="break-words font-bold">{todo.title}</span>
             <span className="text-sm">
               created at: {format(new Date(todo.createdAt), 'yyyy-MM-dd HH:mm:ss')}
               <br />
               updated at: {format(new Date(todo.updatedAt), 'yyyy-MM-dd HH:mm:ss')}
+              <br />
+              deadline: {format(new Date(todo.deadline), 'yyyy-MM-dd HH:mm')}
             </span>
             {todo.description && <span className="break-words text-sm">{todo.description}</span>}
-          </label>
+          </div>
         </div>
         {!todo.deleted && (
           <Button type="button" onClick={onDelete}>
