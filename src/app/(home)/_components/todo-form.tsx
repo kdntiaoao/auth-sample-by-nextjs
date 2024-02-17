@@ -28,7 +28,8 @@ export const TodoForm = () => {
     defaultValues: {
       title: window.sessionStorage.getItem('title') || '',
       description: window.sessionStorage.getItem('description') || '',
-      deadline: window.sessionStorage.getItem('deadline') || new Date(Date.now() + 9 * MS_PER_HOUR).toISOString().slice(0, 16),
+      deadline:
+        window.sessionStorage.getItem('deadline') || new Date(Date.now() + 9 * MS_PER_HOUR).toISOString().slice(0, 16),
     },
   })
   const { addTodo } = useTodos()
@@ -40,13 +41,12 @@ export const TodoForm = () => {
   }
 
   const onSubmit = async (values: FormSchema) => {
-    console.log(values)
-    // await addTodo(values.title, values.description, values.deadline)
-    // form.reset()
-    // window.sessionStorage.removeItem('title')
-    // window.sessionStorage.removeItem('description')
-    // window.sessionStorage.removeItem('deadline')
-    // router.refresh()
+    await addTodo(values.title, values.description, values.deadline)
+    form.reset()
+    window.sessionStorage.removeItem('title')
+    window.sessionStorage.removeItem('description')
+    window.sessionStorage.removeItem('deadline')
+    router.refresh()
   }
 
   return (
