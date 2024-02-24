@@ -13,14 +13,14 @@ const STATUS_LIST: {
     id: 'todo',
     label: 'To Do',
   },
-  // {
-  //   id: 'completed',
-  //   label: 'Completed',
-  // },
-  // {
-  //   id: 'deleted',
-  //   label: 'Deleted',
-  // },
+  {
+    id: 'completed',
+    label: 'Completed',
+  },
+  {
+    id: 'deleted',
+    label: 'Deleted',
+  },
 ]
 
 export const Todos = () => {

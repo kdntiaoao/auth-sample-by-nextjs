@@ -3,7 +3,6 @@
 import { toast } from 'sonner'
 import { TodosListItem } from '../todos-list-item'
 import { Todo, TodoStatus } from '@/types'
-import { useRouter } from 'next/navigation'
 
 type Props = {
   todos: Todo[]
@@ -12,8 +11,6 @@ type Props = {
 }
 
 export const TodosList = ({ todos, status = 'todo', changeStatus }: Props) => {
-  const router = useRouter()
-
   const checkHidden = (todo: Todo): boolean => {
     switch (status) {
       case 'todo':
@@ -30,7 +27,7 @@ export const TodosList = ({ todos, status = 'todo', changeStatus }: Props) => {
     return { ...todo, hidden }
   })
 
-  const changeCompletedState = (id: string, checked: boolean) => {
+  const changeCompletedState = (id: string, checked: boolean, isToastDisplayed: boolean = true) => {
     const todo = todos.find((todo) => todo.id === id)
 
     changeStatus(id, 'completed', checked)
@@ -38,16 +35,16 @@ export const TodosList = ({ todos, status = 'todo', changeStatus }: Props) => {
     const title = todo?.title && todo.title.length > 10 ? todo?.title.slice(0, 10) + '...' : todo?.title || 'タスク'
     const message = checked ? `「${title}」を完了にしました` : `「${title}」を未完了にしました`
 
-    const toastId = toast.success(message, {
-      id: id,
-      duration: 10 * 60 * 1000,
-      action: {
-        label: '元に戻す',
-        onClick: () => changeCompletedState(id, !checked),
-      },
-    })
-
-    console.log(toastId)
+    if (isToastDisplayed) {
+      toast.success(message, {
+        id: id,
+        duration: 4000,
+        action: {
+          label: '元に戻す',
+          onClick: () => changeCompletedState(id, !checked, false),
+        },
+      })
+    }
   }
 
   const changeDeletedState = (id: string) => {
@@ -57,14 +54,6 @@ export const TodosList = ({ todos, status = 'todo', changeStatus }: Props) => {
   if (!todosFormatted.length || todosFormatted.every((todo) => todo.hidden)) {
     return <p>No todos found.</p>
   }
-
-  // console.log(
-  //   JSON.stringify(
-  //     todos.map((t) => ({ t: t.title, comp: t.completed })),
-  //     null,
-  //     2,
-  //   ),
-  // )
 
   return (
     <>

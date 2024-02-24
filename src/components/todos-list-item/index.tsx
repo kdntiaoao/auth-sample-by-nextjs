@@ -45,7 +45,7 @@ export const TodosListItem = ({ todo, hidden, onCheckedChange, onDelete }: Props
         <div className="flex flex-1 items-start gap-2">
           {!todo.deleted && (
             <label className="relative block before:absolute before:-inset-2 before:block">
-              <Checkbox id={todo.id} defaultChecked={todo.completed} onCheckedChange={onCheckedChange} />
+              <Checkbox id={todo.id} checked={todo.completed} onCheckedChange={onCheckedChange} />
             </label>
           )}
           <div className="grid flex-1 gap-2">
