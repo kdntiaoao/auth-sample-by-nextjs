@@ -2,7 +2,6 @@
 
 import { Todo } from '@/types'
 import clsx from 'clsx'
-import styles from './index.module.css'
 import { Checkbox } from '@/components/ui/checkbox'
 import { format } from 'date-fns'
 import { useEffect, useRef, useState } from 'react'
