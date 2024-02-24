@@ -3,6 +3,7 @@
 import { toast } from 'sonner'
 import { TodosListItem } from '../todos-list-item'
 import { Todo, TodoStatus } from '@/types'
+import clsx from 'clsx'
 
 type Props = {
   todos: Todo[]
@@ -26,6 +27,8 @@ export const TodosList = ({ todos, status = 'todo', changeStatus }: Props) => {
     const hidden = checkHidden(todo)
     return { ...todo, hidden }
   })
+
+  const isNotFound = !todosFormatted.length || todosFormatted.every((todo) => todo.hidden)
 
   const changeCompletedState = (id: string, checked: boolean, isToastDisplayed: boolean = true) => {
     const todo = todos.find((todo) => todo.id === id)
@@ -51,12 +54,9 @@ export const TodosList = ({ todos, status = 'todo', changeStatus }: Props) => {
     changeStatus(id, 'deleted', true)
   }
 
-  if (!todosFormatted.length || todosFormatted.every((todo) => todo.hidden)) {
-    return <p>No todos found.</p>
-  }
-
   return (
     <>
+      <p className={clsx('transition-all duration-1000', !isNotFound && 'hidden')}>No todos found.</p>
       <ul>
         {todosFormatted.map((todo) => (
           <TodosListItem

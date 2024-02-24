@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body>
+      <body className="overflow-y-scroll">
         <AuthProvider>
           <Header />
           <main className="pb-8 pt-4">{children}</main>

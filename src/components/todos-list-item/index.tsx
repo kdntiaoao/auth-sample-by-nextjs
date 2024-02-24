@@ -27,21 +27,10 @@ export const TodosListItem = ({ todo, hidden, onCheckedChange, onDelete }: Props
   return (
     <li
       data-todo={todo.id}
-      className={clsx(
-        'mb-2 overflow-hidden transition-all duration-300',
-        hidden && 'delay-200',
-        hidden && styles.shrink,
-      )}
-      style={{ height }}
+      className={clsx('mb-2 overflow-hidden transition-all duration-300', hidden && 'mb-0 opacity-0')}
+      style={{ height: hidden ? 0 : height }}
     >
-      <div
-        ref={ref}
-        className={clsx(
-          'flex gap-4 rounded-md border border-slate-200 p-4 transition-all duration-200',
-          !hidden && 'delay-300',
-          hidden && 'opacity-0 delay-0',
-        )}
-      >
+      <div ref={ref} className="flex gap-4 rounded-md border border-slate-200 p-4">
         <div className="flex flex-1 items-start gap-2">
           {!todo.deleted && (
             <label className="relative block before:absolute before:-inset-2 before:block">
