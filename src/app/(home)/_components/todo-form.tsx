@@ -107,7 +107,6 @@ export const TodoForm = () => {
                   disabled={submitting}
                   value={field.value}
                   onChange={(...args) => {
-                    console.log(args)
                     field.onChange(...args)
                     saveStorage(field.name, args[0].target.value)
                   }}

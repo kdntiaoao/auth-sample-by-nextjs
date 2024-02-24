@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import styles from './index.module.css'
 import { Checkbox } from '@/components/ui/checkbox'
 import { format } from 'date-fns'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from '../ui/button'
 
 type Props = {
@@ -15,25 +15,27 @@ type Props = {
   onDelete: () => void
 }
 
-export const TodosItem = ({ todo, hidden, onCheckedChange, onDelete }: Props) => {
-  const ref = useRef<HTMLLIElement>(null)
+export const TodosListItem = ({ todo, hidden, onCheckedChange, onDelete }: Props) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const [height, setHeight] = useState('auto')
 
   useEffect(() => {
     if (!ref.current) return
-    ref.current.style.height = `${ref.current.clientHeight}px`
+    setHeight(`${ref.current.offsetHeight}px`)
   }, [ref])
 
   return (
     <li
-      ref={ref}
       data-todo={todo.id}
       className={clsx(
         'mb-2 overflow-hidden transition-all duration-300',
         hidden && 'delay-200',
         hidden && styles.shrink,
       )}
+      style={{ height }}
     >
       <div
+        ref={ref}
         className={clsx(
           'flex gap-4 rounded-md border border-slate-200 p-4 transition-all duration-200',
           !hidden && 'delay-300',

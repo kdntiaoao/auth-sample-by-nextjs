@@ -1,105 +1,47 @@
 'use client'
 
+import { TodosList } from '@/components/todos-list'
 import { useTodos } from '@/hooks/use-todos'
-import { useState } from 'react'
-import { toast } from 'sonner'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { TodosItem } from '../todos-item'
+
+type Status = 'todo' | 'completed' | 'deleted'
+
+const STATUS_LIST: {
+  id: Status
+  label: string
+}[] = [
+  {
+    id: 'todo',
+    label: 'To Do',
+  },
+  // {
+  //   id: 'completed',
+  //   label: 'Completed',
+  // },
+  // {
+  //   id: 'deleted',
+  //   label: 'Deleted',
+  // },
+]
 
 export const Todos = () => {
   const { todos, error, loading, changeStatus } = useTodos()
-  const [hiddenTodosUncompleted, setHiddenTodosUncompleted] = useState<string[]>([])
-  const [hiddenTodosCompleted, setHiddenTodosCompleted] = useState<string[]>([])
-
-  const todosUncompleted = todos.filter((todo) => !todo.completed && !todo.deleted)
-  const todosCompleted = todos.filter((todo) => todo.completed && !todo.deleted)
-  const todosDeleted = todos.filter((todo) => todo.deleted)
-
-  const changeCompletedStatus = (id: string, checked: boolean) => {
-    const todo = todos.find((todo) => todo.id === id)
-
-    changeStatus(id, 'completed', checked)
-
-    if (checked) {
-      const title = todo?.title && todo.title.length > 10 ? todo?.title.slice(0, 10) + '...' : todo?.title || 'タスク'
-      toast['success'](`「${title}」を完了にしました`, {
-        action: {
-          label: '元に戻す',
-          onClick: () => changeCompletedStatus(id, !checked),
-        },
-      })
-    }
-
-    if (checked) {
-      setHiddenTodosUncompleted((prev) => [...prev, id])
-      setHiddenTodosCompleted((prev) => prev.filter((todoId) => todoId !== id))
-    } else {
-      setHiddenTodosUncompleted((prev) => prev.filter((todoId) => todoId !== id))
-      setHiddenTodosCompleted((prev) => [...prev, id])
-    }
-  }
-
-  const handleDeleteTodo = (id: string) => {
-    changeStatus(id, 'deleted', true)
-    setHiddenTodosUncompleted((prev) => [...prev, id])
-    setHiddenTodosCompleted((prev) => [...prev, id])
-  }
 
   if (loading) {
     return <p>Loading...</p>
   }
 
-  if (todos.length === 0 || error) {
+  if (error) {
     return <p>No todos found.</p>
   }
 
-  console.log(hiddenTodosUncompleted)
-
   return (
-    <Tabs defaultValue="todo">
-      <TabsList>
-        <TabsTrigger value="todo">To Do</TabsTrigger>
-        <TabsTrigger value="completed">Completed</TabsTrigger>
-        <TabsTrigger value="deleted">Deleted</TabsTrigger>
-      </TabsList>
-      <TabsContent value="todo">
-        <ul>
-          {todosUncompleted.map((todo) => (
-            <TodosItem
-              key={todo.id}
-              todo={todo}
-              hidden={hiddenTodosUncompleted.includes(todo.id)}
-              onCheckedChange={(checked) => changeCompletedStatus(todo.id, checked)}
-              onDelete={() => handleDeleteTodo(todo.id)}
-            />
-          ))}
-        </ul>
-      </TabsContent>
-      <TabsContent value="completed">
-        <ul>
-          {todosCompleted.map((todo) => (
-            <TodosItem
-              key={todo.id}
-              todo={todo}
-              hidden={hiddenTodosCompleted.includes(todo.id)}
-              onCheckedChange={(checked) => changeCompletedStatus(todo.id, checked)}
-              onDelete={() => handleDeleteTodo(todo.id)}
-            />
-          ))}
-        </ul>
-      </TabsContent>
-      <TabsContent value="deleted">
-        <ul>
-          {todosDeleted.map((todo) => (
-            <TodosItem
-              key={todo.id}
-              todo={todo}
-              onCheckedChange={(checked) => changeCompletedStatus(todo.id, checked)}
-              onDelete={() => handleDeleteTodo(todo.id)}
-            />
-          ))}
-        </ul>
-      </TabsContent>
-    </Tabs>
+    <div className="grid gap-10">
+      {STATUS_LIST.map((status) => (
+        <section key={status.id}>
+          <h2 className="pb-4 text-lg font-bold">{status.label}</h2>
+          <TodosList todos={todos} status={status.id} changeStatus={changeStatus} />
+        </section>
+      ))}
+    </div>
   )
 }

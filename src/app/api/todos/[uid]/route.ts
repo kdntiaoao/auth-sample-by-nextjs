@@ -28,7 +28,8 @@ export async function GET(request: Request, context: { params: { uid: string } }
   snapshot.forEach((doc) => {
     todosAll.push({ id: doc.id, ...doc.data() } as Todo)
   })
-  todosAll.sort((a, b) => b.updatedAt - a.updatedAt)
+  // todosAll.sort((a, b) => b.updatedAt - a.updatedAt)
+  todosAll.sort((a, b) => a.deadline.localeCompare(b.deadline))
 
   const totalTodos = todosAll.length
   const totalPages = Math.ceil(totalTodos / TODOS_PER_PAGE) || 1

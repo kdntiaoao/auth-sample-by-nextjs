@@ -1,7 +1,7 @@
 import { Todo } from '@/types'
 import { auth, db } from '@/lib/firebase/admin'
 
-type Body = Pick<Todo, 'title' | 'description' | 'deadline'> & { uid: string }
+type Body = Omit<Todo, 'completed' | 'deleted' | 'createdAt' | 'updatedAt'> & { uid: string }
 
 // 新規TODOを作成する
 export async function POST(request: Request) {
@@ -10,6 +10,12 @@ export async function POST(request: Request) {
 
   if (!requestBody.title) {
     return new Response('Title is required', {
+      status: 400,
+    })
+  }
+
+  if (!requestBody.id) {
+    return new Response('ID is required', {
       status: 400,
     })
   }
@@ -35,9 +41,9 @@ export async function POST(request: Request) {
     deadline: requestBody.deadline,
   }
 
-  const res = await db.collection('users').doc(uid).collection('todos').add(todo)
+  await db.collection('users').doc(uid).collection('todos').doc(requestBody.id).set(todo)
 
-  const newTodo: Todo = { ...todo, id: res.id }
+  const newTodo: Todo = { ...todo, id: requestBody.id }
 
   return new Response(JSON.stringify(newTodo), {
     status: 200,
