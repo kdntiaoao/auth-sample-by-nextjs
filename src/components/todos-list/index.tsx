@@ -30,7 +30,7 @@ export const TodosList = ({ todos, status = 'todo', changeStatus }: Props) => {
     return { ...todo, hidden }
   })
 
-  const changeCompletedStatus = (id: string, checked: boolean) => {
+  const changeCompletedState = (id: string, checked: boolean) => {
     const todo = todos.find((todo) => todo.id === id)
 
     changeStatus(id, 'completed', checked)
@@ -43,14 +43,14 @@ export const TodosList = ({ todos, status = 'todo', changeStatus }: Props) => {
       duration: 10 * 60 * 1000,
       action: {
         label: '元に戻す',
-        onClick: () => changeCompletedStatus(id, !checked),
+        onClick: () => changeCompletedState(id, !checked),
       },
     })
 
     console.log(toastId)
   }
 
-  const changeDeletedStatus = (id: string) => {
+  const changeDeletedState = (id: string) => {
     changeStatus(id, 'deleted', true)
   }
 
@@ -74,8 +74,8 @@ export const TodosList = ({ todos, status = 'todo', changeStatus }: Props) => {
             key={todo.id}
             todo={todo}
             hidden={todo.hidden}
-            onCheckedChange={(checked) => changeCompletedStatus(todo.id, checked)}
-            onDelete={() => changeDeletedStatus(todo.id)}
+            onCheckedChange={(checked) => changeCompletedState(todo.id, checked)}
+            onDelete={() => changeDeletedState(todo.id)}
           />
         ))}
       </ul>
