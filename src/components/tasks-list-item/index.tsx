@@ -25,7 +25,7 @@ export const TasksListItem = ({ task, hidden, onCheckedChange, onDelete }: Props
 
   return (
     <li
-      className={clsx('mb-2 overflow-hidden transition-all duration-300', hidden && 'mb-0 opacity-0')}
+      className={clsx('overflow-hidden transition-all duration-300', !hidden && 'mb-2', hidden && 'mb-0 opacity-0')}
       style={{ height: hidden ? 0 : height }}
     >
       <div ref={ref} className="flex gap-4 rounded-md border border-slate-200 p-4">
