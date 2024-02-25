@@ -24,7 +24,7 @@ const STATUS_LIST: {
 ]
 
 export const Tasks = () => {
-  const { tasks: tasks, error, loading, changeStatus } = useTasks()
+  const { tasks, error, loading, changeStatus } = useTasks()
 
   if (loading) {
     return <p>Loading...</p>

@@ -26,3 +26,10 @@ export const updateTaskStatus = async (uid: string, taskId: string, status: Task
   const updatedTask = await res.json()
   return updatedTask
 }
+
+export const compareTasks = (a: Task, b: Task) => {
+  if (a.deadline === b.deadline) {
+    return a.updatedAt - b.updatedAt
+  }
+  return a.deadline.localeCompare(b.deadline)
+}

@@ -1,5 +1,6 @@
 import type { Task, TasksResult } from '@/types'
 import { auth, db } from '@/lib/firebase/admin'
+import { compareTasks } from '@/lib/tasks'
 
 type RequestBodyPost = Omit<Task, 'completed' | 'deleted' | 'createdAt' | 'updatedAt'>
 
@@ -30,7 +31,7 @@ export async function GET(request: Request, context: { params: { uid: string } }
   snapshot.forEach((doc) => {
     tasksAll.push({ id: doc.id, ...doc.data() } as Task)
   })
-  tasksAll.sort((a, b) => a.deadline.localeCompare(b.deadline))
+  tasksAll.sort(compareTasks)
 
   const totalTasks = tasksAll.length
   const totalPages = Math.ceil(totalTasks / TASKS_PER_PAGE) || 1

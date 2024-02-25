@@ -1,6 +1,6 @@
 import type { Task, TaskStatus } from '@/types'
 import { useUser } from './use-user'
-import { addTaskToStore, updateTaskStatus, getTasks } from '@/lib/tasks'
+import { addTaskToStore, updateTaskStatus, getTasks, compareTasks } from '@/lib/tasks'
 import { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import { tasksAtom } from '@/states/tasks'
@@ -35,7 +35,7 @@ export const useTasks = (): {
     // サインインしているときはFirestoreに追加
     if (uid) {
       await addTaskToStore(uid, { id, title, description, deadline })
-      setTasks((tasks) => [newTask, ...tasks].sort((a, b) => a.deadline.localeCompare(b.deadline)))
+      setTasks((tasks) => [newTask, ...tasks].sort(compareTasks))
     } else {
       // サインインしていないときはローカルストレージに追加
       const tasks = JSON.parse(window.localStorage.getItem('tasks') || '[]')
@@ -107,7 +107,7 @@ export const useTasks = (): {
   }
 
   return {
-    tasks: tasks,
+    tasks,
     error: null,
     loading: isLoading,
     addTask: addTask,

@@ -29,7 +29,7 @@ export const TaskForm = () => {
       title: window.sessionStorage.getItem('title') || '',
       description: window.sessionStorage.getItem('description') || '',
       deadline:
-        window.sessionStorage.getItem('deadline') || new Date(Date.now() + 9 * MS_PER_HOUR).toISOString().slice(0, 16),
+        window.sessionStorage.getItem('deadline') || new Date(Date.now() + 9 * MS_PER_HOUR).toISOString().slice(0, 10),
     },
   })
   const { addTask } = useTasks()
@@ -103,7 +103,7 @@ export const TaskForm = () => {
               <FormLabel>Deadline</FormLabel>
               <FormControl>
                 <Input
-                  type="datetime-local"
+                  type="date"
                   disabled={submitting}
                   value={field.value}
                   onChange={(...args) => {
