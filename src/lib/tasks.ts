@@ -10,7 +10,7 @@ export const getTasks = async (uid: string): Promise<TasksResult> => {
 type TaskValues = Omit<Task, 'completed' | 'deleted' | 'createdAt' | 'updatedAt'>
 
 export const addTaskToStore = async (uid: string, { id, title, description, deadline }: TaskValues): Promise<Task> => {
-  const res = await fetch('/api/tasks', {
+  const res = await fetch(`/api/tasks/${uid}`, {
     method: 'POST',
     body: JSON.stringify({ id, title, description, deadline, uid }),
   })
