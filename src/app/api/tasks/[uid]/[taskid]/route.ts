@@ -25,8 +25,10 @@ export async function PATCH(request: Request, context: { params: { uid: string; 
       status: 404,
     })
   }
+  const now = Date.now()
   const updateData = {
     [requestBody.status]: requestBody.newState,
+    updatedAt: now,
   }
   await taskRef.update(updateData)
 
