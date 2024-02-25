@@ -2,6 +2,7 @@
 import { getApps, initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
+import { debugLog } from '../utils'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -14,7 +15,7 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-console.log('Initializing Firebase app')
+debugLog.client('Initializing Firebase app')
 const app = getApps()[0] ?? initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db = getFirestore(app)

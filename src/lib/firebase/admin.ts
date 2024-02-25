@@ -2,10 +2,11 @@ import { cert, getApps, initializeApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 import { getFirestore } from 'firebase-admin/firestore'
 import { decryptGCPServiceAccount } from '../../../decrypt'
+import { debugLog } from '../utils'
 
 const serviceAccount = decryptGCPServiceAccount()
 
-console.log('Initializing Firebase admin app')
+debugLog('Initializing Firebase admin app')
 
 // https://firebase.google.com/docs/admin/setup
 const adminApp =
