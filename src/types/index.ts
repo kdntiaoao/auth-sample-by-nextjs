@@ -1,4 +1,4 @@
-export type Todo = {
+export type Task = {
   id: string
   title: string
   description: string
@@ -9,11 +9,11 @@ export type Todo = {
   deadline: string
 }
 
-export type TodoStatus = 'completed' | 'deleted'
+export type TaskStatus = 'completed' | 'deleted'
 
-export type TodosResult = {
-  todos: Todo[]
+export type TasksResult = {
+  tasks: Task[]
   page: number
-  totalTodos: number
+  totalTasks: number
   totalPages: number
 }

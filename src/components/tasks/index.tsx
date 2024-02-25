@@ -1,7 +1,7 @@
 'use client'
 
-import { TodosList } from '@/components/todos-list'
-import { useTodos } from '@/hooks/use-todos'
+import { TasksList } from '@/components/tasks-list'
+import { useTasks } from '@/hooks/use-tasks'
 
 type Status = 'todo' | 'completed' | 'deleted'
 
@@ -23,15 +23,15 @@ const STATUS_LIST: {
   },
 ]
 
-export const Todos = () => {
-  const { todos, error, loading, changeStatus } = useTodos()
+export const Tasks = () => {
+  const { tasks: tasks, error, loading, changeStatus } = useTasks()
 
   if (loading) {
     return <p>Loading...</p>
   }
 
   if (error) {
-    return <p>No todos found.</p>
+    return <p>No tasks found.</p>
   }
 
   return (
@@ -39,7 +39,7 @@ export const Todos = () => {
       {STATUS_LIST.map((status) => (
         <section key={status.id}>
           <h2 className="pb-4 text-lg font-bold">{status.label}</h2>
-          <TodosList todos={todos} status={status.id} changeStatus={changeStatus} />
+          <TasksList tasks={tasks} status={status.id} changeStatus={changeStatus} />
         </section>
       ))}
     </div>

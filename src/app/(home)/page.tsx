@@ -1,24 +1,24 @@
 import { Container } from '@/components/container'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { TodoForm } from '@/app/(home)/_components/todo-form'
-import { Todos } from '@/components/todos'
+import { TaskForm } from '@/app/(home)/_components/task-form'
+import { Tasks } from '@/components/tasks'
 
 export default function Home() {
   return (
     <Container>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">Create Todo</Button>
+          <Button variant="outline">Create Task</Button>
         </DialogTrigger>
 
         <DialogContent>
-          <TodoForm />
+          <TaskForm />
         </DialogContent>
       </Dialog>
 
       <div className="mt-6">
-        <Todos />
+        <Tasks />
       </div>
     </Container>
   )
