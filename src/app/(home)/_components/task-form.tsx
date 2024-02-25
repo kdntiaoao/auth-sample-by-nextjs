@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { useTodos } from '@/hooks/use-todos'
+import { useTasks } from '@/hooks/use-tasks'
 import { useRouter } from 'next/navigation'
 import { DialogClose } from '@/components/ui/dialog'
 
@@ -21,7 +21,7 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>
 
-export const TodoForm = () => {
+export const TaskForm = () => {
   const router = useRouter()
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -32,7 +32,7 @@ export const TodoForm = () => {
         window.sessionStorage.getItem('deadline') || new Date(Date.now() + 9 * MS_PER_HOUR).toISOString().slice(0, 16),
     },
   })
-  const { addTodo } = useTodos()
+  const { addTask } = useTasks()
 
   const submitting = form.formState.isSubmitting
 
@@ -41,7 +41,7 @@ export const TodoForm = () => {
   }
 
   const onSubmit = async (values: FormSchema) => {
-    await addTodo(values.title, values.description, values.deadline)
+    await addTask(values.title, values.description, values.deadline)
     form.reset()
     window.sessionStorage.removeItem('title')
     window.sessionStorage.removeItem('description')

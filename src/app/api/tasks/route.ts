@@ -1,9 +1,9 @@
-import { Todo } from '@/types'
+import { Task } from '@/types'
 import { auth, db } from '@/lib/firebase/admin'
 
-type Body = Omit<Todo, 'completed' | 'deleted' | 'createdAt' | 'updatedAt'> & { uid: string }
+type Body = Omit<Task, 'completed' | 'deleted' | 'createdAt' | 'updatedAt'> & { uid: string }
 
-// 新規TODOを作成する
+// 新規Taskを作成する
 export async function POST(request: Request) {
   const requestBody: Body = await request.json()
   const uid = requestBody.uid
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
   const now = Date.now()
 
-  const todo: Omit<Todo, 'id'> = {
+  const task: Omit<Task, 'id'> = {
     title: requestBody.title,
     description: requestBody.description || '',
     completed: false,
@@ -41,11 +41,11 @@ export async function POST(request: Request) {
     deadline: requestBody.deadline,
   }
 
-  await db.collection('users').doc(uid).collection('todos').doc(requestBody.id).set(todo)
+  await db.collection('users').doc(uid).collection('tasks').doc(requestBody.id).set(task)
 
-  const newTodo: Todo = { ...todo, id: requestBody.id }
+  const newTask: Task = { ...task, id: requestBody.id }
 
-  return new Response(JSON.stringify(newTodo), {
+  return new Response(JSON.stringify(newTask), {
     status: 200,
   })
 }
