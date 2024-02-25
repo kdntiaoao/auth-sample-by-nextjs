@@ -7,12 +7,12 @@ export const getTodos = async (uid: string) => {
   return data
 }
 
-type TodoValues = Pick<Todo, 'title' | 'description'>
+type TodoValues = Omit<Todo, 'completed' | 'deleted' | 'createdAt' | 'updatedAt'>
 
-export const addTodoToStore = async (uid: string, { title, description }: TodoValues): Promise<Todo> => {
+export const addTodoToStore = async (uid: string, { id, title, description, deadline }: TodoValues): Promise<Todo> => {
   const res = await fetch('/api/todos', {
     method: 'POST',
-    body: JSON.stringify({ title, description, uid }),
+    body: JSON.stringify({ id, title, description, deadline, uid }),
   })
   const newTodo: Todo = await res.json()
   return newTodo
